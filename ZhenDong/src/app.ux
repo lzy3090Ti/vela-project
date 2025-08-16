@@ -1,0 +1,69 @@
+<template>
+  <!-- 根节点：所有页面的父容器 -->
+  <div class="app-root"> 
+    <slot></slot> <!-- 页面内容插槽 -->
+  </div>
+</template>
+
+<script>
+export default {
+  private: {
+    globalUser: null,    // 全局用户信息
+    appConfig: {         // 全局配置
+      theme: "light",
+      apiBaseUrl: "https://api.example.com"
+    },
+    networkType: "wifi"  // 网络状态
+  },
+
+  onCreate() {
+    console.log("app created");
+    // 1. 初始化用户信息
+    this.globalUser = this.$storage.getSync("userInfo") || null;
+    
+    // 2. 设置路由守卫
+    this.$router.beforeEach((to, from, next) => {
+      if (to.path === "/pay" && !this.globalUser) {
+        next("/login");
+      } else {
+        next();
+      }
+    });
+
+    // 3. 监听网络变化
+    this.$system.network.subscribe((res) => {
+      this.networkType = res.type;
+    });
+  },
+
+  onDestroy() {
+    console.log("app destroyed");
+    // 销毁时：移除网络监听（可选）
+    this.$system.network.unsubscribe();
+  },
+
+  methods: {
+    // 全局方法：切换主题
+    toggleTheme() {
+      this.appConfig.theme = this.appConfig.theme === "light" ? "dark" : "light";
+      document.body.className = this.appConfig.theme;
+      this.$broadcast("themeChanged", this.appConfig.theme);
+    }
+  }
+}
+</script>
+
+<style>
+/* 全局样式 */
+.app-root {
+  font-family: "PingFang SC", sans-serif;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+/* 深色主题样式 */
+.dark .app-root {
+  background-color: #121212;
+  color: white;
+}
+</style>

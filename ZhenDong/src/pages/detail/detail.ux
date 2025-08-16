@@ -1,0 +1,58 @@
+<template>
+  <!-- 最外层容器设置全屏背景 -->
+  <div class="page-container">
+    <text class="title">{{ text }}</text>
+    <input class="btn" type="button" value="返回🔙" onclick="back" />
+  </div>
+</template>
+
+<script>
+import router from "@system.router"
+
+export default {
+  // 页面级组件的数据模型，影响传入数据的覆盖机制：private内定义的属性不允许被覆盖
+  private: {
+    title: "示例页面"
+  },
+
+  back() {
+    // 跳转到应用内的某个页面，router用法详见：文档->接口->页面路由
+    router.push({
+      uri: "/index"
+    })
+  }
+}
+
+</script>
+
+
+
+<style>
+/* 页面整体样式 */
+.page-container {
+  /* 设置背景颜色 */
+  background-color: red;
+  
+  /* 关键：让容器充满整个屏幕 */
+  width: 100%;
+  min-height: 100vh; /* 占满屏幕高度 */
+  
+  /* 内部内容居中 */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  font-size: 20px;
+  text-align: center;
+  color: #333; /* 文字颜色与背景区分开 */
+  padding: 20px;
+}
+
+/* 可选：消除页面默认边距 */
+page {
+  margin: 0;
+  padding: 0;
+}
+</style>
