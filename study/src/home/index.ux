@@ -1,6 +1,7 @@
 <template>
   <div class="page home-page">
     <div class="chapter">
+      <text class="h1">李周烨开发学习</text>
       <text class="h1">1. 框架</text>
       <div class="header">
         <image class="arrow" src="/common/arrow-{{section11}}.png"></image>
